@@ -31,6 +31,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        // Fix: Correct syntax for manifestPlaceholders in Kotlin DSL
+        manifestPlaceholders["appAuthRedirectScheme"] = "com.example.flutter_firebase_notification"
     }
 
     buildTypes {

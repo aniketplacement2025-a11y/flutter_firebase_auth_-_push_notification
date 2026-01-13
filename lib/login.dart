@@ -53,45 +53,58 @@ class _LoginState extends State<Login> {
     });
   }
 
-  Future<void> signInWithGoogle() async {
-    try {
-      // Create GoogleSignIn instance with explicit import
-      final google_sign_in.GoogleSignIn googleSignIn =
-      google_sign_in.GoogleSignIn.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
 
-      // Trigger sign-in flow
-      final GoogleSignInAccount? googleUser =
-      await googleSignIn.authenticate();
+  Future<void> initializeGoogleSignIn() async {
+    // Initialize Google Sign-In with your web client ID
+    await _googleSignIn.initialize(
+      // For Android, you need serverClientId
+      serverClientId: '913264173180-9omgn5uailo0ds0kvb7cc4tpd9a3hrdb.apps.googleusercontent.com',
+      // Optionally, you can also specify clientId
+      // clientId: 'YOUR_CLIENT_ID.apps.googleusercontent.com',
+    );
+  }
+
+  Future<UserCredential?> signInWithGoogle() async {
+    try {
+      // First, ensure Google Sign-In is initialized
+      await initializeGoogleSignIn();
+
+      // Attempt to authenticate
+      final GoogleSignInAccount? googleUser = await _googleSignIn.authenticate(
+        scopeHint: ['email', 'profile'],
+      );
 
       if (googleUser == null) {
         print('User cancelled Google Sign-In');
-        return; // User cancelled
+        return null;
       }
 
       // Get authentication tokens
       final GoogleSignInAuthentication googleAuth =
       await googleUser.authentication;
 
-      // Debug: Print available properties
-      print('Available properties:');
-      print('idToken: ${googleAuth.idToken}');
+      // Debug print to see what we get
+      print('ID Token: ${googleAuth.idToken}');
+      print('User Email: ${googleUser.email}');
 
-      // Method 1: Try with just idToken
-      final credential = GoogleAuthProvider.credential(
+      // Create Firebase credential
+      final OAuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
       );
 
-      // Sign in to Firebase
-      await FirebaseAuth.instance.signInWithCredential(credential);
-
-    } catch (error) {
-      print('Google Sign-In Error: $error');
+      // Sign in to Firebase with the credential
+      return await _auth.signInWithCredential(credential);
+    } catch (e) {
+      print('Google Sign-In Error: $e');
+      return null;
     }
   }
 
-  String generateOtp() {
-    return (Random().nextInt(900000) + 100000).toString();
-  }
+  // String generateOtp() {
+  //   return (Random().nextInt(900000) + 100000).toString();
+  // }
 
   // Future<void> sendOtpEmail(String userEmail) async {
   //   final otp = generateOtp();
