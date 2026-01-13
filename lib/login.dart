@@ -27,15 +27,15 @@ class _LoginState extends State<Login> {
 
   bool isLoading = false;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // REQUIRED: init once (main() or initState)
-    EmailJS.Options(
-        publicKey: 'z1yDxC2-7XO2tvqA9',
-    ); // PUBLIC KEY
-  }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   // REQUIRED: init once (main() or initState)
+  //   EmailJS.Options(
+  //       publicKey: 'z1yDxC2-7XO2tvqA9',
+  //   ); // PUBLIC KEY
+  // }
 
   signIn() async {
     setState(() {
@@ -93,27 +93,27 @@ class _LoginState extends State<Login> {
     return (Random().nextInt(900000) + 100000).toString();
   }
 
-  Future<void> sendOtpEmail(String userEmail) async {
-    final otp = generateOtp();
-
-    try {
-      await EmailJS.send(
-        'service_6q26gfj',          // service_id
-        'template_r3t8m1f',         // template_id
-        {
-          'to_email': userEmail,    // template_params
-          'otp': otp,
-        },
-      );
-
-      Get.snackbar("Success", "OTP sent to your inbox");
-      print("OTP sent successfully");
-
-    } catch (e) {
-      print("EmailJS error: $e");
-      Get.snackbar("Error", "Failed to send OTP");
-    }
-  }
+  // Future<void> sendOtpEmail(String userEmail) async {
+  //   final otp = generateOtp();
+  //
+  //   try {
+  //     await EmailJS.send(
+  //       'service_6q26gfj',          // service_id
+  //       'template_r3t8m1f',         // template_id
+  //       {
+  //         'to_email': userEmail,    // template_params
+  //         'otp': otp,
+  //       },
+  //     );
+  //
+  //     Get.snackbar("Success", "OTP sent to your inbox");
+  //     print("OTP sent successfully");
+  //
+  //   } catch (e) {
+  //     print("EmailJS error: $e");
+  //     Get.snackbar("Error", "Failed to send OTP");
+  //   }
+  // }
 
 
 
@@ -176,25 +176,25 @@ class _LoginState extends State<Login> {
               ),
             ),
 
-            Center(
-              child: ElevatedButton(
-                  onPressed: () {
-                    if (email.text.trim() == "") {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Enter an Email First"),)
-                      );
-                    } else {
-                      sendOtpEmail(email.text.trim());
-                    }
-                  },
-                  child: Text(
-                    "SEND OTP EMAIL",
-                    style: TextStyle(
-                      fontSize: 25,
-                    ),
-                  ),
-              ),
-            ),
+            // Center(
+            //   child: ElevatedButton(
+            //       onPressed: () {
+            //         if (email.text.trim() == "") {
+            //           ScaffoldMessenger.of(context).showSnackBar(
+            //             SnackBar(content: Text("Enter an Email First"),)
+            //           );
+            //         } else {
+            //           sendOtpEmail(email.text.trim());
+            //         }
+            //       },
+            //       child: Text(
+            //         "SEND OTP EMAIL",
+            //         style: TextStyle(
+            //           fontSize: 25,
+            //         ),
+            //       ),
+            //   ),
+            // ),
 
 
           ],
